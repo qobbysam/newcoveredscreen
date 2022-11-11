@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     volumes:
-     - ./data/db:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB
       - POSTGRES_USER
@@ -16,19 +16,18 @@ services:
   web:
     build: .
     volumes:
-     - .:/app/
-     - ./cscreen/staticfiles:/app/cscreen/staticfiles/
-     - ./cscreen/static:/app/cscreen/static/
-    command: > 
-        sh -c "
-              python manage.py collectstatic --settings='acscreen.settings.prod' --noinput   &&
-              python manage.py migrate --settings='acscreen.settings.prod' && 
-              python manage.py runserver 0.0.0.0:8500  --settings='acscreen.settings.prod' "
+      - .:/app/
+      - ./cscreen/staticfiles:/app/cscreen/staticfiles/
+      - ./cscreen/static:/app/cscreen/static/
+    command: >
+      sh -c "
+          python manage.py migrate --settings='acscreen.settings.prod' && 
+            python manage.py collectstatic --settings='acscreen.settings.prod' --noinput   &&
+            
+            python manage.py runserver 0.0.0.0:8500  --settings='acscreen.settings.prod' "
 
-
-    
     ports:
-        - "8500:8500"    
+      - "8500:8500"
     environment:
       - ALLOWED_HOSTS
       - SECRET_KEY
@@ -50,21 +49,17 @@ services:
     depends_on:
       - db
 
-
-
   cluster:
     build: .
     volumes:
-     - .:/app/
-     - ./acscreen/staticfiles:/app/acscreen/staticfiles/
-     - ./acscreen/static:/app/acscreen/static/
-    command: > 
-        sh -c "
-              python manage.py qcluster --settings='acscreen.settings.prod'
-               "
+      - .:/app/
+      - ./acscreen/staticfiles:/app/acscreen/staticfiles/
+      - ./acscreen/static:/app/acscreen/static/
+    command: >
+      sh -c "
+            python manage.py qcluster --settings='acscreen.settings.prod'
+             "
 
-
-    
     environment:
       - ALLOWED_HOSTS
       - SECRET_KEY
