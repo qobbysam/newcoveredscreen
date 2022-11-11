@@ -1,0 +1,89 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    volumes:
+     - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    command: -p 5433
+  web:
+    build: .
+    volumes:
+     - .:/app/
+     - ./cscreen/staticfiles:/app/cscreen/staticfiles/
+     - ./cscreen/static:/app/cscreen/static/
+    command: > 
+        sh -c "
+              python manage.py collectstatic --settings='acscreen.settings.prod' --noinput   &&
+              python manage.py migrate --settings='acscreen.settings.prod' && 
+              python manage.py initdb --settings='acscreen.settings.prod' &&
+              python manage.py runserver 0.0.0.0:8500  --settings='acscreen.settings.prod' "
+
+
+    
+    ports:
+        - "8500:8500"    
+    environment:
+      - ALLOWED_HOSTS
+      - SECRET_KEY
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_HOST
+      - DB_PORT
+      - FIRST_ADMIN_USERNAME
+      - FIRST_ADMIN_EMAIL
+      - FIRST_ADMIN_PASSWORD
+      - SQUARE_ACCESS_TOKEN
+      - SQUARE_LOCATION_ID
+      - SQUARE_APP_ID
+      - SQUARE_ENVIRONMENT
+      - QUEST_URL
+      - QUEST_ACCOUNT_NUMBER
+      - SITE_BASE_URL
+    depends_on:
+      - db
+
+
+
+  cluster:
+    build: .
+    volumes:
+     - .:/app/
+     - ./acscreen/staticfiles:/app/acscreen/staticfiles/
+     - ./acscreen/static:/app/acscreen/static/
+    command: > 
+        sh -c "
+              python manage.py qcluster --settings='acscreen.settings.prod'
+               "
+
+
+    
+    environment:
+      - ALLOWED_HOSTS
+      - SECRET_KEY
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_HOST
+      - DB_PORT
+      - FIRST_ADMIN_USERNAME
+      - FIRST_ADMIN_EMAIL
+      - FIRST_ADMIN_PASSWORD
+      - SQUARE_ACCESS_TOKEN
+      - SQUARE_LOCATION_ID
+      - SQUARE_APP_ID
+      - SQUARE_ENVIRONMENT
+      - QUEST_URL
+      - QUEST_ACCOUNT_NUMBER
+      - SITE_BASE_URL
+
+    depends_on:
+      - db
