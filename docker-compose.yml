@@ -17,8 +17,8 @@ services:
     build: .
     volumes:
       - .:/app/
-      - ./cscreen/staticfiles:/app/cscreen/staticfiles/
-      - ./cscreen/static:/app/cscreen/static/
+      - ./acscreen/staticfiles:/app/acscreen/staticfiles/
+      - ./acscreen/static:/app/acscreen/static/
     command: >
       sh -c "
           python manage.py migrate --settings='acscreen.settings.prod' && 
