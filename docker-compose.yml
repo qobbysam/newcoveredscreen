@@ -14,7 +14,7 @@ services:
       - "5445:5445"
     command: -p 5445
     networks:
-      - coverednetwork
+      - djangonetwork
     
 
   web:
@@ -54,7 +54,7 @@ services:
       - db
     networks:
       - coverednetwork
-
+      - djangonetwork
   cluster:
     build: .
     volumes:
@@ -65,7 +65,9 @@ services:
       sh -c "
            python manage.py qcluster --settings='acscreen.settings.prod'
              "
-
+    networks:
+      - djangonetwork
+      
     environment:
       - ALLOWED_HOSTS
       - SECRET_KEY
@@ -92,4 +94,6 @@ networks:
   coverednetwork:
     driver: bridge
     external: true
+  djangonetwork:
+    driver: bridge
 
