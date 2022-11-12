@@ -50,11 +50,17 @@ services:
       - QUEST_URL
       - QUEST_ACCOUNT_NUMBER
       - SITE_BASE_URL
+    
     depends_on:
       - db
+
     networks:
       - coverednetwork
       - djangonetwork
+
+    restart: always
+
+
   cluster:
     build: .
     volumes:
@@ -67,7 +73,8 @@ services:
              "
     networks:
       - djangonetwork
-      
+
+
     environment:
       - ALLOWED_HOSTS
       - SECRET_KEY
