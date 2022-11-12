@@ -29,7 +29,7 @@ services:
       sh -c "
           python manage.py migrate --settings='acscreen.settings.prod' && 
           python manage.py collectstatic --settings='acscreen.settings.prod' --noinput   &&
-          python -m gunicorn --env DJANGO_SETTINGS_MODULE=acscreen.settings.prod  acscreen.wsgi --bind=0.0.0.0:9500"
+          python -m gunicorn --env DJANGO_SETTINGS_MODULE=acscreen.settings.prod acscreen.wsgi --bind=0.0.0.0:9500"
              
 
     ports:
@@ -100,10 +100,12 @@ services:
       - db
 
 networks:
+  default:
+    name: coverednetwork
   coverednetwork:
     driver: bridge
     external: true
-    
+
   djangonetwork:
     driver: bridge
 
