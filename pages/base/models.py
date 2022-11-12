@@ -364,7 +364,8 @@ class StandardPage(Page):
     api_fields = [
         APIField('introduction'),
         APIField('body'),
-        APIField('cta', serializer=HomeCtaSectionSerializer() )
+        APIField('cta', serializer=HomeCtaSectionSerializer() ),
+        APIField('image',serializer=ImageSerializedField())
     ]
 
 
