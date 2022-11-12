@@ -9,10 +9,10 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
     expose:
-      - "5433"
+      - "5445"
     ports:
-      - "5433:5433"
-    command: -p 5433
+      - "5445:5445"
+    command: -p 5445
   web:
     build: .
     volumes:
