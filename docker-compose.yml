@@ -13,6 +13,8 @@ services:
     ports:
       - "5445:5445"
     command: -p 5445
+    networks:
+      - coverednetwork
   web:
     build: .
     volumes:
@@ -23,7 +25,8 @@ services:
       sh -c "
           python manage.py migrate --settings='acscreen.settings.prod' && 
           python manage.py collectstatic --settings='acscreen.settings.prod' --noinput   &&
-          python -m gunicorn --env DJANGO_SETTINGS_MODULE=acscreen.settings.prod  acscreen.wsgi --bind=0.0.0.0:9500"          
+          python -m gunicorn --env DJANGO_SETTINGS_MODULE=acscreen.settings.prod  acscreen.wsgi --bind=0.0.0.0:9500"
+             
 
     ports:
       - "9500:9500"
@@ -47,6 +50,8 @@ services:
       - SITE_BASE_URL
     depends_on:
       - db
+    networks:
+      - coverednetwork
 
   cluster:
     build: .
