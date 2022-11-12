@@ -87,6 +87,6 @@ services:
       - db
 
 networks:
-  default:
-    name: coverednetwork
+  coverednetwork:
+    driver: bridge
     external: true
