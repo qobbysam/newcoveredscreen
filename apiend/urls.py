@@ -42,7 +42,7 @@ urlpatterns = [
     re_path(r'^account/', include('allauth.urls')),
     re_path(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
 
-    path('salesman/', include('salesman.urls')),
+    #path('salesman/', include('salesman.urls')),
     path("oscar/", include(apps.get_app_config("oscarapicheckout").urls[0])),
     path("oscar/", include("oscarapi.urls")),
 

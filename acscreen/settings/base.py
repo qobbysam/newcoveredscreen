@@ -35,11 +35,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
-    'salesman.core',
-    'salesman.basket',
-    'salesman.checkout',
-    'salesman.orders',
-    'salesman.admin',
+    # 'salesman.core',
+    # 'salesman.basket',
+    # 'salesman.checkout',
+    # 'salesman.orders',
+    # 'salesman.admin',
 
 
     'rest_framework',
@@ -52,11 +52,12 @@ INSTALLED_APPS = [
     
     
     'rest_auth.registration',
-
+    
+    'wagtail.sites',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
-    'wagtail.sites',
+    
     'wagtail.users',
     'wagtail.snippets',
     'wagtail.documents',
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail',
+    
     'wagtail.api.v2',
 
     'modelcluster',

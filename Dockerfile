@@ -1,14 +1,29 @@
-FROM python:3
+FROM python:3.10
 
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /app
-
-ADD . /app
 
 RUN apt-get update && apt-get -y install libpq-dev gcc
 
-RUN pip install -r requirements.txt
+
+RUN pip install pipenv
+
+WORKDIR /app
+
+
+COPY Pipfile .
+
+COPY Pipfile.lock .
+
+#RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy --skip-lock
+
+RUN mkdir /app/.venv
+
+ADD . /app
+
+
+RUN pipenv install --system --deploy --skip-lock
+
 
 
 
