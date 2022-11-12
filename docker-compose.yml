@@ -52,7 +52,9 @@ services:
   cluster:
     build: .
     volumes:
-      - ./appdata:/app/
+     - .:/app/
+     - ./acscreen/staticfiles:/app/acscreen/staticfiles/
+     - ./acscreen/static:/app/acscreen/static/
     command: >
       sh -c "
            python manage.py qcluster --settings='acscreen.settings.prod'
