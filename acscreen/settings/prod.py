@@ -1,10 +1,10 @@
 
 
-from pathlib import Path
 import os
 import sys
-from acscreen.settings.base import *
+from pathlib import Path
 
+from acscreen.settings.base import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -198,4 +198,5 @@ SQUARE_APP_ID = "sandbox-sq0idb-6PkvROzH7_GveRMNFZBXqw"
 SQUARE_ENVIRONMENT='sandbox'
 
 USE_X_FORWARDED_HOST = True
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
