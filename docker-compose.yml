@@ -14,7 +14,7 @@ services:
       - "5445:5445"
     command: -p 5445
     networks:
-      - local_network
+      - coverednetwork
     
 
   web:
@@ -53,7 +53,6 @@ services:
     depends_on:
       - db
     networks:
-      - local_network
       - coverednetwork
 
   cluster:
@@ -93,5 +92,4 @@ networks:
   coverednetwork:
     driver: bridge
     external: true
-  local_network:
-    driver: host
+
