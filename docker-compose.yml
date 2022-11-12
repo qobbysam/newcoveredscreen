@@ -23,8 +23,7 @@ services:
       sh -c "
           python manage.py migrate --settings='acscreen.settings.prod' && 
           python manage.py collectstatic --settings='acscreen.settings.prod' --noinput   &&
-            
-          python manage.py runserver 0.0.0.0:9500  --settings='acscreen.settings.prod' "
+          python -m gunicorn --env DJANGO_SETTINGS_MODULE=acscreen.settings.prod  acscreen.wsgi --bind=0.0.0.0:9500"          
 
     ports:
       - "9500:9500"
