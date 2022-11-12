@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-@$4l-0&5708lw9!6yf9#j(osn9d*2pb)(wi52n2@ale02w3m*4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['beta.coveredscreen.com']
 
 
 SITE_ID = 1
