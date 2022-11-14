@@ -1,0 +1,5 @@
+
+
+DRUG_TEST_PRODUCT = 'Drug_Test_Class'
+
+EMPLOYEE_CONSORTIUM = 'Employee'

@@ -1,0 +1,136 @@
+
+{% extends "oscar/layout_2_col_account.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+
+
+
+        <div class="">
+            <h3 class="text-dark mb-4">Employees</h3>
+
+            
+                    <div class="d-flex justify-content-between">
+                        <a type="button"class="btn btn-info" href="{%url 'gen-employee-create'%}">Add Employee</a>
+                    <a type="button"class="btn btn-info" href="{%url 'gen-employee-download-active'%}">Download Active</a>
+                    </div>
+                    
+                    
+
+                    {% if employees%}
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <table class="table my-0" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Active</th>
+                                    <th>Actions</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                
+                                {%for employee in employees%}
+                                <tr>
+                                    <td>{{employee.first_name}}</td>
+                                  
+                                    <td>{{employee.last_name}}</td>
+                                    <td>{{employee.email}}</td>
+                                    <td>{{employee.phone_number}}</td>
+                                    <td>
+                                       {%if employee.is_active%}
+
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle text-success" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                      </svg>
+
+                                    {%else%}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle text-danger" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                      </svg>
+                                      {%endif%}
+                                    </div>
+                                    </td>
+
+                                   
+                                    <td>
+                                   
+                                    <div class="d-flex justify-content-around" role="group" aria-label="Actions">
+                                        <a href="{% url 'gen-employee-toggle' employee.id %}" class="btn btn-sm btn-info" type="button">Change Active</a>
+                                        <a href="{% url 'gen-employee-edit' employee.id %}" class="btn btn-sm btn-info" type="button"><i class=" fa  fa-pen"></i></a>
+                                        <a href="{% url 'gen-employee-delete' employee.id %}" class="btn btn-sm btn-danger" type="button"><i class="fa fa-trash" aria-hidden="true"></i>                                        </a>
+                                        <a href="{% url 'gen-employee-toggle' employee.id %}" class="btn btn-sm btn-success" type="button">Order Drugtest</a>
+                                      
+                                        
+                                    </div>
+                                </td>
+                                </tr>
+
+                                {%endfor%}
+                                
+                            </tbody>
+                           
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="row">
+                        {% comment %} <div class="col-md-6 align-self-center">
+                            <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                        </div> {% endcomment %}
+                        <div class="col-md-6">
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination">
+
+                                    {% if employee.has_previous %}
+                                    <a href="?page=1">&laquo; first</a>
+                                    <li class="page-item enabled"><a class="page-link" aria-label="Previous" href="?page={{ employee.previous_page_number }}">previous</a><span aria-hidden="true">«</span></li>
+        
+                                {% endif %}
+                                {% if employee.has_next %}
+                                <span class="current">
+                                    Page {{ employee.number }} of {{ employee.paginator.num_pages }}.
+                                </span>
+                                {% endif %}
+                                    {% if employee.has_next %}
+    
+                                    
+                                  
+                                    <li class="page-item"> <a class="page-link" aria-label="Next" href="?page={{ employee.next_page_number }}">next</a><span aria-hidden="true">»</span></a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    {%else%}
+                    <div><h3>No employess to show</h3></div>
+
+                    {%endif%}
+            
+        </div>
+  
+<a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+
+
+{% endblock content %}

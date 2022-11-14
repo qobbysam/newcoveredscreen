@@ -1,0 +1,138 @@
+
+{% extends "oscar/layout_2_col_account.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+
+
+        <div class="container-fluid">
+            
+
+          
+                    <h3 class="text-dark mb-4">Order Status</h3>
+                    
+                
+
+                <div class="card-body ">
+                    
+
+                    {% if page_obj%}
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        
+                        <table class="table my-0" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                   
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                
+                                {%for order in page_obj%}
+
+                                <tr>
+                                    <td>{{order.order_details.date_added}}</td>
+                              
+                                    {% if order.order_details.stage == 'AR' or order.order_details.stage == 'SU' %}
+                                        <td><p>Your order is ready </p></td>
+                                    {% elif order.order_details.stage == 'AE' %}
+                                        <td><p>Contact us something went wrong with order</p></td>
+    
+                                    {% else %}
+    
+                                        <td><p>working on it</p></td>
+    
+                                    {%endif%}
+                            
+                                    {% if order.order_details.stage == 'AR' or order.order_details.stage == 'SU' %}
+                                    <td>
+                                        <a type="button" class="btn btn-small btn-primary" href="{%url 'gen-drugtest-one' pk=order.order_details.id%}" >View Details</a>                                        
+                        
+                                    </td>
+                                    {%else%}
+                                        <td></td> 
+    
+                                    {% endif %} 
+                                </tr>
+
+
+
+                                {%endfor%}
+                                
+                            </tbody>
+                           <tfoot>
+                            <tr>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                               
+                                
+                            </tr>
+                            </tfoot>
+                        </table>
+                    
+
+                    <div class="row">
+                        {% comment %} <div class="col-md-6 align-self-center">
+                            <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                        </div> {% endcomment %}
+                        <div class="col-md-6">
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination">
+
+                                    {% if page_obj.has_previous %}
+                                    <a href="?page=1">&laquo; first</a>
+                                    <li class="page-item enabled"><a class="page-link" aria-label="Previous" href="?page={{ employee.previous_page_number }}">previous</a><span aria-hidden="true">«</span></li>
+        
+                                {% endif %}
+                                {% if page_obj.has_next %}
+                                <span class="current">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                </span>
+                                {% endif %}
+                                    {% if page_obj.has_next %}
+    
+                                    
+                                  
+                                    <li class="page-item"> <a class="page-link" aria-label="Next" href="?page={{ page_obj.next_page_number }}">next</a><span aria-hidden="true">»</span></a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    {%else%}
+                    <div><h3>No Orders to show to show</h3></div>
+
+                    {%endif%}
+                
+        
+        
+                </div>
+            </div>
+
+</div>
+<a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+
+
+
+{% endblock content %}

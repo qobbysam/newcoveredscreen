@@ -1,0 +1,68 @@
+
+{% extends "profilebase.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-homepage{% endblock body_class%}
+
+{% block extra_css %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+
+
+<div id="wrapper">
+    {% include 'partials/usernav.html' %}
+<div class="d-flex flex-column" id="content-wrapper">
+    <div id="content">
+        {% include 'partials/usernavsub.html' %}
+    <div class="container-fluid">
+        <h3 class="text-dark ">Consortium Page</h3>
+        <div class="row">
+            <div class = "col">
+                <div id="app-2">
+
+                </div>
+            </div>
+        </div>
+ 
+    </div>
+</div>
+{% include 'partials/userfooter.html' %}
+</div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+</div>
+
+
+{% endblock content %}
+
+
+{% block scripts%}
+        <script>
+
+            var ctx = {{ consortium_ms | safe }};
+        //let xs = document.getElementById('app').__vue__
+
+        window.localStorage.setItem('server_consortium', JSON.stringify(ctx))
+        </script>
+
+{% endblock scripts%}
+
+
+{% block extrascripts%}
+
+<script src="{%static '/js/node_modules_canvg_lib_index_es_js.js' %}"></script>
+<script src="{%static '/js/node_modules_dompurify_dist_purify_js.js' %}"></script>
+
+        <script src= "{%static '/js/chunk-vendors-2.js'%}"></script>
+        <script src="{%static '/js/app-2.js' %}"></script>
+
+{% endblock extrascripts %}
