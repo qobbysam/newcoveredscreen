@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-from userapplication.signals import create_purchase_drugtest
+from userapplication.orderhandler import create_purchase_drugtest
 
 class DrugtestConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'

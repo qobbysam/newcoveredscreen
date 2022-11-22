@@ -1,22 +1,14 @@
 
 from django_q.tasks import async_task, result
-from drugtest.models import DrugTestModel
-from drugtest.task_helpers import getOrderInfo, sendOrderRequest, updateResponse
-from company.models import UserCompanyModel
+from drugtest.quest_helpers import QuestFirst, QuestSecond, QuestThird
 
 def sendApiRequest(user,order):
-    print('sending api request')
-    order_info = getOrderInfo(order)
 
-    print (order_info)
+    questfirst = QuestFirst(order,user)
 
-    company = UserCompanyModel.objects.get(pk=int(user.default_company))
-
-    keys =  sendOrderRequest(user,company,order_info)
-
-    return user , keys
-
-        
+    questfirst.handleFirst()
+    #keys =  sendOrderRequest(user,company,order_info)
+    return questfirst
 
 
 def checkApiSuccess(task):
@@ -24,44 +16,45 @@ def checkApiSuccess(task):
 
     if task.success:
 
-        user,keys = task.result
+        questfirst = task.result
 
-        async_task('drugtest.tasks.waitForResponse', user, keys, hook='drugtest.tasks.successResponseCheck')
+        async_task('drugtest.tasks.waitForResponse', questfirst, hook='drugtest.tasks.successResponseCheck')
 
     else:
         print("resending task")
 
 
 
-def waitForResponse(user, keys):
+def waitForResponse(questfirst):
 
     print('waiting for quest response')
 
-    for key in keys:
-        updateResponse(user=user, key=key)
-        
+    questsecond = QuestSecond(questfirst)
 
-    return user, keys
+    questsecond.handleSecond()
+
+    return questsecond
+
 
 
 def successResponseCheck(task):
 
     if task.success:
 
-        user, keys = task.result
+        questsecond= task.result
 
-        async_task('drugtest.tasks.sendSuccessTask', user, order, hook='drugtest.tasks.checkSendResponseSuccess')
+        async_task('drugtest.tasks.sendSuccessTask', questsecond, hook='drugtest.tasks.checkSendResponseSuccess')
 
-def sendSuccessTask(user,keys):
+
+def sendSuccessTask(questsecond):
 
     print('sending success task')
 
-    for key in keys:
+    questthird = QuestThird(questsecond)
 
-        drug_obj = DrugTestModel.objects.get(get_info_key = key)
+    questthird.finalrun()
 
-        drug_obj.updateStage('SU')
-    
+    return questthird
 
     
 

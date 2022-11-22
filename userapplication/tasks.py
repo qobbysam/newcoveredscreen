@@ -3,10 +3,10 @@ from oscar.apps.order.models import Order
 from company.models import UserCompanyModel
 from employee.models import EmployeeModel
 
-
+'''Create Employee if user is a company and order belongs to employee'''
 def employee_creator(user, order):
     
-    user_company = UserCompanyModel.objects.get(pk=user.default_company)
+    user_company = UserCompanyModel.objects.get(pk=user.default_company_key)
 
     if not user_company.is_company():
 
@@ -48,8 +48,8 @@ def get_info(user,order):
                 val_l= line.attributes.all()
                 val_list = val_l.values_list()
 
-                one_info['company'] = user.default_company
-                one_info['is-dot'] = UserCompanyModel.objects.get(id=user.default_company).is_dot()
+                one_info['company'] = user.default_company_key
+                one_info['is-dot'] = UserCompanyModel.objects.get(id=user.default_company_key).is_dot()
 
                 values = get_values(one_info, val_list)
                 out.append(values)
@@ -64,7 +64,7 @@ def get_values(obj, val_list):
         end = v[-1]
         end_b_one = v[-2]
 
-        if end_b_one == 'dob':
+        if end_b_one == 'date-of-birth':
             obj['dob'] = end
         
         elif end_b_one == 'email':
@@ -81,8 +81,8 @@ def get_values(obj, val_list):
         elif end_b_one == 'middle-name':
             obj['middle-name'] = end
         
-        elif end_b_one == 'primary-id':
-            obj['primary-id'] = end
+        elif end_b_one == 'license-number':
+            obj['license-number'] = end
     
     return obj
     

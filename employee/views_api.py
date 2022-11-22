@@ -31,7 +31,7 @@ from employee.serializers import EmployeeSerializer, AddEmployeeSerializer
 
 
 
-class EmployeeListView(ListAPIView):
+class EmployeeListAPIView(ListAPIView):
 
     pagination_class = PageNumberPagination
     serializer_class = EmployeeSerializer
@@ -39,7 +39,7 @@ class EmployeeListView(ListAPIView):
 
     def get_queryset(self):
         
-        return  EmployeeModel.objects.filter(company=self.request.user.default_company).order_by('-add_date')
+        return  EmployeeModel.objects.filter(company=self.request.user.default_company_key).order_by('-add_date')
 
 
     # def get_object(self, **kwargs):
@@ -65,15 +65,15 @@ class EmployeeListView(ListAPIView):
     #     return context
 
 
-class EmployeeCreateView(APIView):
+class EmployeeCreateAPIView(APIView):
 
-    def post(self):
+    def post(self, request):
 
-        serializer = AddEmployeeSerializer(self.request.data )
+        serializer = AddEmployeeSerializer(data=request.data )
 
         if serializer.is_valid():
             
-            serializer.save(self.request.user)
+            serializer.save(request.user)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -103,8 +103,11 @@ class EmployeeDeleteView(DeleteView):
     success_url = reverse_lazy('gen-employees')
 
 
-class EmployeeUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
+class EmployeeRetrieveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = EmployeeModel.objects.all()
     serializer_class = EmployeeSerializer
+
+    
 
 
 
@@ -137,9 +140,9 @@ class EmployeeDownloadActive(View):
         buffer = io.BytesIO()
         #p  = canvas.Canvas(buffer)
 
-        company = UserCompanyModel.objects.get(id=request.user.default_company)
+        company = UserCompanyModel.objects.get(id=request.user.default_company_key)
 
-        employees = EmployeeModel.objects.filter(company=self.request.user.default_company, is_active=True).values(
+        employees = EmployeeModel.objects.filter(company=self.request.user.default_company_key, is_active=True).values(
              'unique_id','first_name', 'middle_name','last_name' )
 
         employee_list = list(employees)

@@ -68,7 +68,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = EmployeeModel
-        fields = ['first_name', 'last_name', 'middle_name', 'email', 'phone_number', 'unique_id', 'is_active']
+        fields = '__all__'
+        #fields = ['first_name', 'last_name', 'middle_name', 'email', 'phone_number', 'unique_id', 'is_active', 'id']
 
 
 class AddEmployeeSerializer(serializers.Serializer):
@@ -83,16 +84,18 @@ class AddEmployeeSerializer(serializers.Serializer):
 
     def save(self, user):
         print('saving employee')
-        user_company = UserCompanyModel.objects.get(pk= user.default_company)
+        user_company = UserCompanyModel.objects.get(pk= user.default_company_key)
 
 
         new_emp, created = EmployeeModel.objects.get_or_create(
-                            first_name = self.cleaned_data['first_name'],
-                             last_name   = self.cleaned_data['last_name'],
-                             email = self.cleaned_data['email'],
-                             phone_number = self.cleaned_data['phone_number'],
+                            first_name = self.validated_data['first_name'],
+                             last_name   = self.validated_data['last_name'],
+                             email = self.validated_data['email'],
+                             phone_number = self.validated_data['phone_number'],
                             company = user_company,
-                            date_of_birth = self.cleaned_data['date_of_birth']
+                            date_of_birth = self.validated_data['date_of_birth'],
+                            license_number =self.validated_data['license_number'],
+                            license_state = self.validated_data['license_state']
 
 
 

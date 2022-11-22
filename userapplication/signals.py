@@ -1,69 +1,21 @@
 from django.dispatch import Signal, receiver
 
 from oscar.apps.order.signals import order_placed
-user_registered = Signal()
-user_logged_in = Signal()
 
-create_purchase_consortium = Signal()
-create_purchase_drugtest = Signal()
-create_employee_signal = Signal()
-
-
-def notifyconsortium(sender, user, detail):
-
-    print("notifyconsortium")
-    
-    create_purchase_consortium.send_robust(sender=sender, user=user, detail=detail)
-
-def notifydrugtest(sender, user, order):
-
-    print("notifydrugtest")
-    create_purchase_drugtest.send_robust(sender=sender, user=user, order=order)
-
-
-
-def notifyemployee(sender, user, order):
-    print("sending employee")
-
-    create_employee_signal.send_robust(sender=sender, user=user, order=order)
-
+from userapplication.orderhandler import OrderHandler
 
 @receiver(order_placed)
 def order_placed_receiver(sender, user, order , **kwargs):
     print("receiver called")
-    print(order)
+    # print(order)
 
-    ##find order category
+    if order.status == 'Authorized':
 
-    lines = order.lines.all()
+        received_order = OrderHandler(order, user,sender)
 
-    product_ = lines[0]
-
-    product_class = product_.product.get_product_class()
-
-    print(product_class)
-
-
-    print(product_class.id) 
-
-
-
-    for line in lines:
-        product_c = line.product.get_product_class()
-
-        id_ = product_c.name
-        notifyemployee(sender=sender, user=user, order=order.number)
-        if id_ == 'Consortium_Membership_Class':
-
-            detail = {}
-
-            notifyconsortium(sender=sender,user=user,detail =detail )
-        elif id_ == 'Drug_Test_Class':
-            
-            notifydrugtest(sender=sender, user=user, order=order.number)
+        received_order.handle(sender)
 
             
-
 
 
 def async_caller(user,order):

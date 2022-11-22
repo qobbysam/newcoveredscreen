@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-from userapplication.signals import create_employee_signal
+from userapplication.orderhandler import create_employee_signal
 from .signals import handle_create_employee
 
 class EmployeeConfig(AppConfig):

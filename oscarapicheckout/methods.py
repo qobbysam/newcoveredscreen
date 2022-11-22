@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from oscar.core.loading import get_model
 from . import states
-from .signals import order_placed
+from oscar.apps.order.signals import order_placed
 
 import logging
 
@@ -236,7 +236,7 @@ class SquarePayment(PaymentMethod):
                 self.make_event_quantity(event, line, line.quantity)
 
             # Send order_placed signal
-            order_placed.send(sender=self, order=order, user=request.user, request=request)
+            #order_placed.send(sender=self, order=order, user=request.user, request=request)
             return states.Complete(source.amount_debited, source_id=source.pk)
 
         else:

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from userapplication.signals import create_purchase_consortium
+from userapplication.orderhandler import create_purchase_consortium
 
 class ConsortiumConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'

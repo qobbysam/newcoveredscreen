@@ -28,9 +28,9 @@ urlpatterns = [
     path('company-ops/', include('company.urls')),
     
     path('login/', views.AccountAuthView.as_view(), name='gen-login'),
-            path('logout/', views.LogoutView.as_view(), name='gen-logout'),
+    path('logout/', views.LogoutView.as_view(), name='gen-logout'),
             path('register/', views.AccountRegistrationView.as_view(), name='gen-register'),
-            path('summary/', login_required(views.AccountSummaryView.as_view()), name='gen-summary'),
+    path('summary/', login_required(views.AccountSummaryView.as_view()), name='gen-summary'),
             path('change-password/', login_required(views.ChangePasswordView.as_view()), name='gen-change-password'),
 
             # Profile

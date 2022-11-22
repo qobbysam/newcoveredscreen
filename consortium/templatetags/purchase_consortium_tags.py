@@ -8,7 +8,7 @@ register = template.Library()
 def can_purchase_consortium(context):
     request = context.get("request")
 
-    company = request.user.default_company
+    company = request.user.default_company_key
 
     consortium = ConsortiumModel.objects.get(pk = company)
     return consortium.can_purchase()

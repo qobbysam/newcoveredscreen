@@ -93,6 +93,16 @@ INSTALLED_APPS += [
     'oscarapicheckout',
 
     'oscarapi',
+    'company',
+
+    'employee',
+    'userapplication',
+    'drugtest',
+    'consortium',
+
+    'django_q',
+
+    
     
 
 
@@ -198,3 +208,22 @@ SQUARE_ACCESS_TOKEN='EAAAEJKd_A5MVWHM0TpweVvPpSCNpEg8KtJ8gjnxr41HsCYodkwQObmZBmD
 SQUARE_LOCATION_ID ="L887M6VXFTBRM"
 SQUARE_APP_ID = "sandbox-sq0idb-6PkvROzH7_GveRMNFZBXqw"
 SQUARE_ENVIRONMENT='sandbox'
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 4,
+    'timeout': 90,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+QUEST_URL = "http://localhost:5000/"
+QUEST_ACCOUNT_NUMBER = "11321237"
+QUEST_CSL = "001"
+
+SITE_BASE_URL = 'localhost:8000'

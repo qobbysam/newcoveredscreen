@@ -78,7 +78,7 @@ class DrugTestListView(TemplateView):
 
         user = self.request.user
 
-        data = DrugTestModel.objects.filter(company= user.default_company).order_by('-order_details__date_added')
+        data = DrugTestModel.objects.filter(company= user.default_company_key).order_by('-order_details__date_added')
 
         print(data)
         print(user)

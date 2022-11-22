@@ -27,7 +27,7 @@ class EmployeeListView(TemplateView):
 
         context = super().get_context_data(**kwargs)
         
-        data = EmployeeModel.objects.filter(company=self.request.user.default_company).order_by('-add_date')
+        data = EmployeeModel.objects.filter(company=self.request.user.default_company_key).order_by('-add_date')
 
         p = Paginator(data, 8)
         

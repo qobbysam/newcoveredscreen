@@ -10,8 +10,8 @@ from django.dispatch import receiver
 from django.dispatch import Signal
 from dateutil.relativedelta import relativedelta
 
-from userapplication import signals
-from userprofile.models import User
+from userapplication.orderhandler import create_purchase_consortium
+from userextend.models import CustomUser as User
 from company.models import UserCompanyModel
 
 from .models import ConsortiumModel, ConsortiumPurchaseCreation
@@ -25,7 +25,7 @@ from .models import ConsortiumModel, ConsortiumPurchaseCreation
 #User = get_user_model()
 from datetime import date
 
-@receiver(signals.create_purchase_consortium)
+@receiver(create_purchase_consortium)
 def create_purchase_consortium(sender, user, detail , **kwargs):
     print("create purchase receiver called")
     print(user)
@@ -34,7 +34,7 @@ def create_purchase_consortium(sender, user, detail , **kwargs):
 
     print("pass user")
     today = date.today()
-    company_ = UserCompanyModel.objects.get(pk=user_.default_company)
+    company_ = UserCompanyModel.objects.get(pk=user_.default_company_key)
     print("pass company")
 
     

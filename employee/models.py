@@ -11,7 +11,8 @@ class EmployeeModel(models.Model):
     middle_name = models.CharField(blank=True, null=True,max_length=50)
     email = models.EmailField(blank=True, null=True, max_length=50)
     phone_number = models.CharField(blank=True, null=True, max_length=20)
-    unique_id = models.CharField(blank=True, null=True, max_length=20)
+    license_number = models.CharField(blank=True, null=True, max_length=20)
+    license_state = models.CharField(blank=True, null=True, max_length=20)    
     company = models.ForeignKey(UserCompanyModel, on_delete=models.CASCADE, blank=True, null=True)
     add_date = models.DateField(auto_now_add=True, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -48,7 +49,7 @@ class EmployeeModel(models.Model):
         self.is_dot_employee = empobj['is-dot']
         self.is_active = True
         self.phone_number = empobj['phone-number']
-        self.unique_id = empobj['primary-id']
+        self.unique_id = empobj['license-number']
         self.company = UserCompanyModel(id=empobj['company'])
         self.email = empobj['email']
         super().save()
@@ -62,7 +63,7 @@ class EmployeeModel(models.Model):
         except Exception as e:
             print(e)
         self.phone_number = empobj['phone-number']
-        self.unique_id = empobj['primary-id']
+        self.unique_id = empobj['license-number']
         super().save()
         
 

@@ -17,7 +17,7 @@ def drugtestvalues(linesvalues):
     return out
 
 
-def getOrderInfo(order):
+def getOrderInfo(order,company):
 
     print(dir(order))
 
@@ -43,11 +43,21 @@ def getOrderInfo(order):
             print(attr_v)
             vals = drugtestvalues(attr_v)
 
+            vals['is-dot'] = get_is_dot(company)
+
             out_info.append(vals)
 
 
     return out_info
 
+
+
+def get_is_dot(company):
+
+    if company.is_dot():
+        return 'T'
+    else:
+        return 'F'
 
 
 def sendOrderRequest(user, company,order_info):
@@ -113,7 +123,7 @@ def apicall(body, company):
 def updateResponse(user, key):
 
 
-    time.sleep(5)
+    #time.sleep(5)
 
     url = settings.QUEST_URL + 'getkey/'
 
@@ -176,7 +186,7 @@ def buildorder(user, company, details):
     else:
         order_body['emails'] += [user.email]
 
-    if details['middle-name'] == "#X":
+    if details['middle-name'] == "none":
 
         order_body['middleName'] = ""
 
@@ -188,15 +198,15 @@ def buildorder(user, company, details):
     order_body['lastName'] = details['last-name']
 
    
-    order_body['primaryID'] = details['primary-id']
-    order_body['dob'] = details['dob']
+    order_body['primaryID'] = details['license-number']
+    order_body['dob'] = details['date-of-birth']
     order_body['primaryPhone'] = details['phone-number']
     order_body['secondaryPhone'] = "" 
     order_body['contactName'] = user.get_full_name()
     order_body['telephoneNumber'] = user.phone
     order_body['labAccount'] = settings.QUEST_ACCOUNT_NUMBER
     
-    order_body['collectionId'] = details['csl']
+    order_body['collectionId'] = details['collection-location']
     order_body['csl'] = settings.QUEST_CSL
 
     order_body['clientReferenceID'] = company.quest_client_id

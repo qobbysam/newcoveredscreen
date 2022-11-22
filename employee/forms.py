@@ -66,7 +66,7 @@ class EditEmployeeForm(forms.ModelForm):
     
     class Meta:
         model = EmployeeModel
-        fields = ['first_name', 'last_name', 'middle_name', 'email', 'phone_number', 'unique_id', 'is_active']
+        fields = ['first_name', 'last_name', 'middle_name', 'email', 'phone_number', 'license_number', 'is_active']
 
 
 class AddEmployeeForm(forms.Form):
@@ -81,7 +81,7 @@ class AddEmployeeForm(forms.Form):
 
     def save(self, user):
         print('saving employee')
-        user_company = UserCompanyModel.objects.get(pk= user.default_company)
+        user_company = UserCompanyModel.objects.get(pk= user.default_company_key)
 
 
         new_emp, created = EmployeeModel.objects.get_or_create(

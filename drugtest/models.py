@@ -51,7 +51,7 @@ class QuestOrderModel(models.Model):
     step_complete = models.BooleanField(default=False)
     error_occured = models.BooleanField(default=False)
     error_message = models.CharField(max_length=255, blank=True, null=True)
-
+    from_order = models.CharField(max_length=255, blank=True, null=True)
     def __str__(self):
         return "{} {}", self.client_id, self.stage
 
