@@ -10,3 +10,8 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['test_context'] = "message from testing context"
         return context
+    
+
+class OfficeAdminView(TemplateView):
+
+    template_name = "userpublic/adminindex.html"

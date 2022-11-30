@@ -9,7 +9,7 @@ from .serializers import (
     PaymentMethodsSerializer,
     PaymentStateSerializer,
 )
-from .signals import order_placed
+from oscar.apps.order.signals import order_placed
 from .states import DECLINED, CONSUMED
 from . import utils
 
@@ -99,8 +99,6 @@ class CheckoutView(generics.GenericAPIView):
         order = c_ser.save()
         request.session[CHECKOUT_ORDER_ID] = order.id
 
-        # # Send order_placed signal
-        # order_placed.send(sender=self, order=order, user=request.user, request=request)
 
         # Save payment steps into session for processing
         previous_states = utils.list_payment_method_states(request)
@@ -112,7 +110,9 @@ class CheckoutView(generics.GenericAPIView):
             data=c_ser.validated_data["payment"],
         )
         utils.set_payment_method_states(order, request, new_states)
-
+        # # Send order_placed signal
+        order_placed.send(sender=self, order=order, user=request.user, request=request)
+        print('called in views')
         # Return order data
         o_ser = OrderSerializer(order, context={"request": request})
         return Response(o_ser.data)

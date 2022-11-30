@@ -107,7 +107,7 @@ class OrderCreatorMixin(object):
                 self.record_voucher_usage(order, voucher, user)
 
         # Send signal for analytics to pick up
-        order_placed.send(sender=self, order=order, user=user)
+        #order_placed.send(sender=self, order=order, user=user)
 
         # Done! Return the order.Order model
         return order

@@ -11,6 +11,7 @@ STAGE_CHOICES = (
     ('AR', 'API CALL RESPONSE'),
     ('AE', 'API CALL BAD'),
     ('SU', 'ALL STATUS SENT'),
+    ('RR', 'RESULTS READY')
 
 )
 

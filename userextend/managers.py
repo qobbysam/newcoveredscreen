@@ -37,8 +37,7 @@ class CustomUserManager(BaseUserManager):
 
         return user
 
-    def is_company(self, account_type) -> bool:
-        return account_type != 'NC'
+    
 
     def create_superuser(self, email, password, **extra_fields):
         """
@@ -56,6 +55,29 @@ class CustomUserManager(BaseUserManager):
 
     def notifyall(self, user, company):
         signals.user_registered_company.send_robust(sender=self, user=user, company=company)
+
+    def is_company(self, account_type) -> bool:
+
+        return account_type != 'NC'
+    # def get_summary(self):
+    #     out = {}
+    #     out['email'] = self.email 
+    #     out['phone'] = self.phone
+    #     out['first_name'] = self.first_name
+    #     out['last_name'] = self.last_name
+    #     out['is_company'] = self.is_company()
+
+    #     if self.is_company():
+    #         out['company'] = self.get_company_summary()
+    #     else:
+    #         out['company'] = {}
+
+    #     return out
+           
+
+
+
+
     
 
         

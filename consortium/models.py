@@ -13,6 +13,7 @@ class ConsortiumModel(models.Model):
     end_date = models.DateField(null=True, blank=True,)
     active = models.BooleanField(default=False)
 
+    
     company = models.ForeignKey(UserCompanyModel, on_delete=models.CASCADE)
 
     consortium_type = models.CharField(choices=consortim_choices, default="bs", blank=True, null=True, max_length=3)
@@ -43,6 +44,7 @@ class ConsortiumModel(models.Model):
         ms['end_date'] = self.end_date.strftime("%b %d, %Y")
         ms['can_purchase'] = self.can_purchase()
         ms['is_expired'] = self.is_expired()
+        ms['consortium_type'] = self.consortium_type
         return ms
     
     def can_purchase(self):

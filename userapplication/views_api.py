@@ -19,8 +19,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
+from django.contrib.auth import get_user_model
 from company.models import UserCompanyModel
-
+from drugtest.models import DrugTestModel
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -29,7 +30,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from oscar.apps.customer.utils import get_password_reset_url
-from oscar.core.compat import get_user_model
+#from oscar.core.compat import get_user_model
 from oscar.core.loading import (
     get_class, get_classes, get_model, get_profile_class)
 from oscar.core.utils import safe_referrer
@@ -39,7 +40,9 @@ from userapplication import signals
 
 from consortium.models import ConsortiumModel
 from consortium.serializers import ConsortiumModelSerializer
+from employee.models import EmployeeModel
 
+from userapplication.serializers import UserAddressSerializer
 PageTitleMixin, RegisterUserMixin = get_classes(
     'customer.mixins', ['PageTitleMixin', 'RegisterUserMixin'])
 CustomerDispatcher = get_class('customer.utils', 'CustomerDispatcher')
@@ -57,12 +60,82 @@ User = get_user_model()
 
 logger = logging.getLogger(__name__)
 
-class DashHomeAPIView(APIView):
+class DashHomeAPIView(Order,APIView):
     
     def get(self, request):
 
-        return Response({'msg': 'respone'}, status=status.HTTP_200_OK)
+        try:
 
+            data = self.getData(request.user)
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({'msg': 'Bad Request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def getData(self,user):
+        data = {}
+        
+        data['orders'] = self.transformOrders(user)
+
+        
+        data['employees'] = self.transformEmployees(user)
+
+
+        data['drugresults'] = self.transformTestResults(user)
+
+        return data
+
+    def transformOrders(self, user):
+
+        print(dir(Order))
+        orderqs = Order.objects.all()
+        orderqs.filter(user=user)
+
+        data = {}
+        pending_total = 0
+        fufilled_total = 0
+        for order in orderqs:
+
+            lines  = order.lines.all()
+            
+
+            for line in lines:
+                if line.status == 'Pending':
+                    pending_total = pending_total +1
+                if line.status == 'Fufilled':
+                    fufilled_total = fufilled_total + 1
+        
+
+        data['total'] = orderqs.count()
+        data['pending'] = pending_total
+        data['fufilled'] = fufilled_total
+
+        return data
+
+    def transformEmployees(self, user):
+        employeeqs = EmployeeModel.objects.all()
+        employeeqs.filter(company=UserCompanyModel(id=user.default_company_key))
+
+        data = {}
+
+        data['total'] = employeeqs.count()
+        data['active'] = employeeqs.filter(is_active=True).count()
+        data['random_selected'] = employeeqs.filter(is_selected_random=True).count()
+
+        return data
+    
+    def transformTestResults(self, user):
+        resultsqs = DrugTestModel.objects.all()
+        resultsqs.filter(company=UserCompanyModel(id=user.default_company_key))
+
+        data = {}
+
+        data['total'] = resultsqs.count()
+        data['pending'] = resultsqs.filter(order_details__stage='SU').count()
+        data['result_ready'] = resultsqs.filter(order_details__stage='RR').count()
+
+        return data
 
 class MyEmployeesView(TemplateView):
     template_name = 'userapplication/employee_index.html'
@@ -111,19 +184,21 @@ class ConsortiumAPIView(APIView):
 
         return context
 
-class AccountSummaryView(generic.RedirectView):
-    """
-    View that exists for legacy reasons and customisability. It commonly gets
-    called when the user clicks on "Account" in the navbar.
+class UserSummaryAPIView(APIView):
 
-    Oscar defaults to just redirecting to the profile summary page (and
-    that redirect can be configured via OSCAR_ACCOUNT_REDIRECT_URL), but
-    it's also likely you want to display an 'account overview' page or
-    such like. The presence of this view allows just that, without
-    having to change a lot of templates.
-    """
-    pattern_name = settings.OSCAR_ACCOUNTS_REDIRECT_URL
-    permanent = False
+    def get(self, request):
+
+        try:
+            print(dir(request.user))
+            #user = User.objects.get(id=request.user.id)
+            userInfo = request.user.get_summary()
+
+            return Response(userInfo, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({"msg":"user does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+    
 
 
 class AccountRegistrationView(RegisterUserMixin, generic.FormView):
@@ -689,13 +764,10 @@ class AnonymousOrderDetailView(generic.DetailView):
 # Address book
 # ------------
 
-class AddressListView(PageTitleMixin, generic.ListView):
+class AddressListAPIView(ListAPIView):
     """Customer address book"""
-    context_object_name = "addresses"
-    template_name = 'oscar/customer/address/address_list.html'
-    paginate_by = settings.OSCAR_ADDRESSES_PER_PAGE
-    active_tab = 'addresses'
-    page_title = _('Address Book')
+    #queryset = UserAddress.objects.all()
+    serializer_class = UserAddressSerializer
 
     def get_queryset(self):
         """Return customer's addresses"""

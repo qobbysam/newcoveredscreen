@@ -16,6 +16,7 @@ from oscarapi.serializers.utils import (
     OscarHyperlinkedModelSerializer,
     OscarModelSerializer,
 )
+
 from oscarapi.serializers.fields import (
     DrillDownHyperlinkedRelatedField,
     TaxIncludedDecimalField,
@@ -113,7 +114,7 @@ class ShippingMethodSerializer(serializers.Serializer):
 
 class OrderLineAttributeSerializer(OscarHyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="order-lineattributes-detail")
-
+    #url = serializers.CharField()
     class Meta:
         model = OrderLineAttribute
         fields = "__all__"

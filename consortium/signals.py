@@ -26,7 +26,7 @@ from .models import ConsortiumModel, ConsortiumPurchaseCreation
 from datetime import date
 
 @receiver(create_purchase_consortium)
-def create_purchase_consortium(sender, user, detail , **kwargs):
+def create_purchase_consortium(sender, user, type_consortium , **kwargs):
     print("create purchase receiver called")
     print(user)
 
@@ -37,8 +37,8 @@ def create_purchase_consortium(sender, user, detail , **kwargs):
     company_ = UserCompanyModel.objects.get(pk=user_.default_company_key)
     print("pass company")
 
-    
-    obj, created = ConsortiumModel.objects.get_or_create(company=company_)
+    print("detail ...............", type_consortium)
+    obj, created = ConsortiumModel.objects.get_or_create(company=company_, consortium_type=type_consortium)
 
     if created:
         obj.updatecreated(
@@ -47,17 +47,18 @@ def create_purchase_consortium(sender, user, detail , **kwargs):
             active = True,
             company_name =  company_.company_name,
 
-
         )
 
         print("new consortium created")
+        company_.updatePurchase()
     else:
         new_end = obj.end_date + relativedelta(years=1)
         obj.updatecreated(
         start_date = obj.end_date,
         end_date = new_end,
         active = True,
-        company_name =  company_.company_name,)
+        company_name =  company_.company_name,
+        consortium_type = type_consortium)
             
         print ("consortim already exists")
 

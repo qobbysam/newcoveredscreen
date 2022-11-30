@@ -2,9 +2,12 @@ from django.db import models
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.apps import apps
 
-
+#from company.managers import CompanyManager
 # Create your models here.
+#from consortium.models import ConsortiumModel
+
 
 account_type_choices = (
     ('NC', 'NOT COMPANY'),
@@ -27,10 +30,10 @@ class UserCompanyModel(models.Model):
     consortium_purchased = models.BooleanField(default=False)
     is_company_true = models.BooleanField(default=False, null=True)
 
+    #objects = CompanyManager()
 
     def __str__(self):
         return self.company_name
-
     def rtnDot(self):
         if self.account_type == 'FMC':
             return "T"
@@ -45,8 +48,38 @@ class UserCompanyModel(models.Model):
             return True
         else:
             return False
-            
-    
+        
+    def updatePurchase(self):
+        self.consortium_purchased = True
+
+        self.save()
+
+
+
+    def get_summary(self):
+
+        if self.consortium_purchased:
+
+            out = self.get_consortium_summary()
+
+            out['consortium_purchased'] = self.consortium_purchased
+
+            return out
+        else:
+            out = {}   
+            out['consortium_purchased']  = self.consortium_purchased 
+
+            return out  
+    def get_consortium_summary(self):
+        ConsortiumModel = apps.get_model('consortium', 'ConsortiumModel')
+
+        consortium = ConsortiumModel.objects.get(company=self.id)
+
+        msg = consortium.generate_ms()
+
+        return msg
+
+        
     class Meta:
         ordering = ['add_date']
         

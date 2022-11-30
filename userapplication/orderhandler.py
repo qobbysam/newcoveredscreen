@@ -25,7 +25,7 @@ class OrderHandler:
 
         print("notifyconsortium")
         
-        create_purchase_consortium.send_robust(sender=sender, user=user, detail=detail)
+        create_purchase_consortium.send_robust(sender=sender, user=user, type_consortium=detail)
 
     def notifydrugtest(self,sender, user, order):
 
@@ -50,9 +50,28 @@ class OrderHandler:
             self.notifyemployee(sender=sender, user=self.user, order=self.order.number)
             if id_ == 'Consortium_Membership_Class':
 
-                detail = {}
+                detail = self.get_consortium_type(line)
 
                 self.notifyconsortium(sender=sender,user=self.user,detail =detail )
             elif id_ == 'Drug_Test_Class':
                 
                 self.notifydrugtest(sender=sender, user=self.user, order=self.order.number)
+
+    def get_consortium_type(self, line):
+        lines_attr = line.attributes.all()
+
+        val_list = lines_attr.values_list()
+        
+        out_val = ""
+        for v in val_list:
+            end = v[-1]
+            end_b_one = v[-2]
+
+            if end_b_one == 'empty-one':
+                if end == "Basic":
+                    out_val = 'bs'
+                elif end == "Silver":
+                    out_val = 'sl'
+                elif end == 'Gold':
+                    out_val = 'gd'
+        return out_val

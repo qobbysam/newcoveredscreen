@@ -8,6 +8,7 @@ from userapplication.orderhandler import OrderHandler
 def order_placed_receiver(sender, user, order , **kwargs):
     print("receiver called")
     # print(order)
+    print("status ........",order.status)
 
     if order.status == 'Authorized':
 

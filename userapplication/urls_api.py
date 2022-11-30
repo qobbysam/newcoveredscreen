@@ -15,18 +15,21 @@ from oscar.core.loading import get_class
 from userapplication import views_api
 urlpatterns = [
 
-    path('dash/', views_api.DashHomeAPIView.as_view(), name="apiDash"),
+    path('dash/',login_required (views_api.DashHomeAPIView.as_view()), name="apiDash"),
 
     path('employees/', include('employee.urls_api')),
 
-    path('consortium/', views_api.ConsortiumAPIView.as_view(), name="api-consortium"),
+    path('consortium/', login_required (views_api.ConsortiumAPIView.as_view()), name="api-consortium"),
 
-    path('testresult/', include('drugtest.urls_api')),
+    path('testresult/',include('drugtest.urls_api')),
 
     #path('sqapi/', include('squarepayment.urls')),
 
     path('company-ops/', include('company.urls_api')),
 
+    path('address/', login_required( views_api.AddressListAPIView.as_view()), name='api-address'),
+
+    path('usersummary/',login_required( views_api.UserSummaryAPIView.as_view()), name='api-usersummary')
     #path('login/', views.AccountAuthView.as_view(), name='gen-login'),
     #path('logout/', views.LogoutView.as_view(), name='gen-logout'),
     #       path('register/', views.AccountRegistrationView.as_view(), name='gen-register'),
@@ -34,7 +37,7 @@ urlpatterns = [
     #path('change-password/', login_required(views.ChangePasswordView.as_view()), name='gen-change-password'),
 
     # Profile
-    #path('profile/', login_required(views.ProfileView.as_view()), name='gen-profile-view'),
+    #path('profile/', login_requusired(views.ProfileView.as_view()), name='gen-profile-view'),
 
     #path('profile/edit/', login_required(views.ProfileUpdateView.as_view()), name='gen-profile-update'),
     #path('profile/delete/', login_required(views.ProfileDeleteView.as_view()), name='gen-profile-delete'),
