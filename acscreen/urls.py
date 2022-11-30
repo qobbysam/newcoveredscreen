@@ -30,6 +30,8 @@ urlpatterns = [
     path('', include('userpublic.urls')),
     path('api/v1/', include('apiend.urls')),
 
+    path('oadmin/api/v1/', include('superadminapi.urls_api') ),
+
     # re_path(r'^rest-auth/', include('rest_auth.urls')),
     # re_path(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     # re_path(r'^account/', include('allauth.urls')),
@@ -40,6 +42,8 @@ urlpatterns = [
     path('pages/', include(wagtail_urls)),
 
     path('os/', include(apps.get_app_config('oscar').urls[0])),
+
+    
 
      
 

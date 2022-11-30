@@ -46,7 +46,11 @@ urlpatterns = [
     path("oscar/", include(apps.get_app_config("oscarapicheckout").urls[0])),
     path("oscar/", include("oscarapi.urls")),
 
-    path('sqapi/', include('squarepayment.urls')) 
+    path('sqapi/', include('squarepayment.urls')) ,
+
+    path('userapplication/', include('userapplication.urls_api'))
+    #path('company/', include('company.urls_api')),
+    #path('employees/', include('employee.urls_api'))
     
 
 

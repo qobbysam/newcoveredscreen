@@ -90,9 +90,19 @@ INSTALLED_APPS += [
     'treebeard',
     'sorl.thumbnail',   # Default thumbnail backend, can be replaced
     'django_tables2',
+    'oscarapicheckout',
 
     'oscarapi',
-    'oscarapicheckout'
+    'company',
+
+    'employee',
+    'userapplication',
+    'drugtest',
+    'consortium',
+
+    'django_q',
+
+    
     
 
 
@@ -108,6 +118,7 @@ ORDER_STATUS_AUTHORIZED = 'Authorized'
 
 # Other statuses
 ORDER_STATUS_SHIPPED = 'Shipped'
+ORDER_STATUS_FUFILLED = 'Fufilled'
 ORDER_STATUS_CANCELED = 'Canceled'
 
 # Pipeline Config
@@ -116,8 +127,9 @@ OSCARAPI_INITIAL_ORDER_STATUS = ORDER_STATUS_PENDING
 OSCAR_ORDER_STATUS_PIPELINE = {
     ORDER_STATUS_PENDING: (ORDER_STATUS_PAYMENT_DECLINED, ORDER_STATUS_AUTHORIZED, ORDER_STATUS_CANCELED),
     ORDER_STATUS_PAYMENT_DECLINED: (ORDER_STATUS_AUTHORIZED, ORDER_STATUS_CANCELED),
-    ORDER_STATUS_AUTHORIZED: (ORDER_STATUS_SHIPPED, ORDER_STATUS_CANCELED),
+    ORDER_STATUS_AUTHORIZED: (ORDER_STATUS_SHIPPED, ORDER_STATUS_CANCELED, ORDER_STATUS_FUFILLED),
     ORDER_STATUS_SHIPPED: (),
+    ORDER_STATUS_FUFILLED: (),
     ORDER_STATUS_CANCELED: (),
 }
 
@@ -125,6 +137,7 @@ OSCAR_INITIAL_LINE_STATUS = ORDER_STATUS_PENDING
 OSCAR_LINE_STATUS_PIPELINE = {
     ORDER_STATUS_PENDING: (ORDER_STATUS_SHIPPED, ORDER_STATUS_CANCELED),
     ORDER_STATUS_SHIPPED: (),
+    ORDER_STATUS_FUFILLED: (),
     ORDER_STATUS_CANCELED: (),
 }
 
@@ -180,6 +193,7 @@ REST_FRAMEWORK = {
 
 
 AUTH_USER_MODEL = 'userextend.CustomUser'
+
 ACCOUNT_LOGOUT_ON_GET = True
 OSCARAPI_ENABLE_REGISTRATION = True
 
@@ -198,3 +212,22 @@ SQUARE_ACCESS_TOKEN='EAAAEJKd_A5MVWHM0TpweVvPpSCNpEg8KtJ8gjnxr41HsCYodkwQObmZBmD
 SQUARE_LOCATION_ID ="L887M6VXFTBRM"
 SQUARE_APP_ID = "sandbox-sq0idb-6PkvROzH7_GveRMNFZBXqw"
 SQUARE_ENVIRONMENT='sandbox'
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 4,
+    'timeout': 90,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+QUEST_URL = "http://localhost:5000/"
+QUEST_ACCOUNT_NUMBER = "11321237"
+QUEST_CSL = "001"
+
+SITE_BASE_URL = 'localhost:8000'

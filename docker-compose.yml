@@ -9,6 +9,7 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+    container_name: db
     expose:
       - "5445"
     ports:
@@ -55,6 +56,8 @@ services:
     
     depends_on:
       - db
+    links:
+      - db:db 
 
     networks:
       - coverednetwork
@@ -73,8 +76,8 @@ services:
       sh -c "
            python manage.py qcluster --settings='acscreen.settings.prod'
              "
-    networks:
-      - djangonetwork
+    
+    
 
 
     environment:
@@ -98,6 +101,10 @@ services:
 
     depends_on:
       - db
+    links:
+      - db:db
+    networks:
+      - djangonetwork
 
 networks:
   default:

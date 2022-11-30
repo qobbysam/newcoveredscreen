@@ -75,14 +75,12 @@ INSTALLED_APPS = [
     'userextend',
 
     'apiend',
-    'shop',
 
 
 
     'pages.base.apps.BaseConfig',
     'pages.service.apps.ServiceConfig',
 
-    'company',
 ]
 
 MIDDLEWARE = [

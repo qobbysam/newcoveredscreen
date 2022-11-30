@@ -90,13 +90,23 @@ INSTALLED_APPS += [
     'sorl.thumbnail',   # Default thumbnail backend, can be replaced
     'django_tables2',
 
+      'oscarapicheckout',
+
     'oscarapi',
-    'oscarapicheckout'
+    'company',
+
+    'employee',
+    'userapplication',
+    'drugtest',
+    'consortium',
+
+    'django_q',
 
 
 
 
 ]
+
 
 OSCAR_DEFAULT_CURRENCY = 'USD'
 # Needed by oscarapicheckout
@@ -106,6 +116,7 @@ ORDER_STATUS_AUTHORIZED = 'Authorized'
 
 # Other statuses
 ORDER_STATUS_SHIPPED = 'Shipped'
+ORDER_STATUS_FUFILLED = 'Fufilled'
 ORDER_STATUS_CANCELED = 'Canceled'
 
 # Pipeline Config
@@ -114,8 +125,9 @@ OSCARAPI_INITIAL_ORDER_STATUS = ORDER_STATUS_PENDING
 OSCAR_ORDER_STATUS_PIPELINE = {
     ORDER_STATUS_PENDING: (ORDER_STATUS_PAYMENT_DECLINED, ORDER_STATUS_AUTHORIZED, ORDER_STATUS_CANCELED),
     ORDER_STATUS_PAYMENT_DECLINED: (ORDER_STATUS_AUTHORIZED, ORDER_STATUS_CANCELED),
-    ORDER_STATUS_AUTHORIZED: (ORDER_STATUS_SHIPPED, ORDER_STATUS_CANCELED),
+    ORDER_STATUS_AUTHORIZED: (ORDER_STATUS_SHIPPED, ORDER_STATUS_CANCELED, ORDER_STATUS_FUFILLED),
     ORDER_STATUS_SHIPPED: (),
+    ORDER_STATUS_FUFILLED: (),
     ORDER_STATUS_CANCELED: (),
 }
 
@@ -123,8 +135,10 @@ OSCAR_INITIAL_LINE_STATUS = ORDER_STATUS_PENDING
 OSCAR_LINE_STATUS_PIPELINE = {
     ORDER_STATUS_PENDING: (ORDER_STATUS_SHIPPED, ORDER_STATUS_CANCELED),
     ORDER_STATUS_SHIPPED: (),
+    ORDER_STATUS_FUFILLED: (),
     ORDER_STATUS_CANCELED: (),
 }
+
 
 
 API_ENABLED_PAYMENT_METHODS = [
@@ -146,7 +160,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-WAGTAIL_SITE_NAME = "localhost"
+WAGTAIL_SITE_NAME = "beta.coveredscreen.com"
 
 
 SALESMAN_PRODUCT_TYPES = {
@@ -200,3 +214,22 @@ SQUARE_ENVIRONMENT='sandbox'
 USE_X_FORWARDED_HOST = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 4,
+    'timeout': 90,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+QUEST_URL = "http://questend.coveredscreen.com:5000/"
+QUEST_ACCOUNT_NUMBER = "11321237"
+QUEST_CSL = "001"
+
+SITE_BASE_URL = 'questend.coveredscreen.com'

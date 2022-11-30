@@ -1,0 +1,46 @@
+
+{% extends "oscar/layout_2_col_account.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+
+
+    <div class="container">
+        <h3 class="text-dark mb-1"> One Drug Test</h3>
+        
+        {% for key, value in get_info.items %}
+
+        {%if key == "display_url"%}
+        <a href="{{value}}" class="btn btn-info" target="_blank">Update</a>
+        {% endif %}
+        {%if key == "display_url"%}
+        <div class="embed-responsive embed-responsive-1by1">
+            <iframe class="embed-responsive-item" src="{{value}}"></iframe>
+          </div>
+        {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+
+<a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+
+
+
+{% endblock content %}
