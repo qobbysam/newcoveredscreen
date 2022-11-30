@@ -15,6 +15,7 @@ sorl-thumbnail = "*"
 wagtail = "*"
 gunicorn = "*"
 django-q = "*"
+reportlab = "*"
 
 [dev-packages]
 
