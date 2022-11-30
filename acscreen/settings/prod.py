@@ -90,8 +90,17 @@ INSTALLED_APPS += [
     'sorl.thumbnail',   # Default thumbnail backend, can be replaced
     'django_tables2',
 
+      'oscarapicheckout',
+
     'oscarapi',
-    'oscarapicheckout'
+    'company',
+
+    'employee',
+    'userapplication',
+    'drugtest',
+    'consortium',
+
+    'django_q',
 
 
 
