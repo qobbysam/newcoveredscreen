@@ -51,7 +51,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_staff=True.'))
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser must have is_superuser=True.'))
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email=email, password=password, **extra_fields)
 
     def notifyall(self, user, company):
         signals.user_registered_company.send_robust(sender=self, user=user, company=company)
